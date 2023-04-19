@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./component/LoginPage";
+import DashboardPage from "./component/DashboardPage";
+import RegistrationPage from "./component/RegistrationPage";
+import NavBar from "./component/Navbar";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLogout = () => {
+    // Remove the JWT token from local storage
+    localStorage.removeItem("jwtToken");
+    // Check if user is already logged out
+    if (!localStorage.jwtToken) {
+      setIsLoggedIn(false);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+      </Routes>
+    </Router>
   );
 }
 
